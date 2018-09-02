@@ -3,8 +3,9 @@ import Foundation
 public class Graph
 {
     private let V: Int
+    public var edges: [(Int, Int)]
     private let isBiDirectional: Bool
-    public var adjList: [Node]?
+    private var adjList: [Node]?
     private var adjArray: [[Int]]?
     
     public var numberOfVertices: Int{
@@ -15,6 +16,7 @@ public class Graph
     {
         self.V = V
         self.isBiDirectional = isBiDirectional
+        self.edges = []
         self.adjList = [Node]()
         for v in 0..<V
         {
@@ -28,13 +30,14 @@ public class Graph
         self.adjArray?[edge.0][edge.1] = 1
         let node1 = Node(edge.1)
         self.add(node1, to: self.adjList?[edge.0])
+        self.edges.append((edge.0, edge.1))
         
         if self.isBiDirectional
         {
             self.adjArray?[edge.1][edge.0] = 1
             let node2 = Node(edge.0)
             self.add(node2, to: self.adjList?[edge.1])
-            
+            self.edges.append((edge.1, edge.0))
         }
     }
 }
@@ -121,7 +124,7 @@ extension Graph
         }
     }
     
-    private func verticesAdjacent(to vertex: Int) -> [Int]
+    public func verticesAdjacent(to vertex: Int) -> [Int]
     {
         var arr = [Int]()
         var node = self.adjList?[vertex].next
